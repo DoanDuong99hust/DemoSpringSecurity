@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.example.demosecurity.security.ApplicationUserPermission.*;
 import static com.example.demosecurity.security.ApplicationUserRole.*;
@@ -32,17 +33,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()// account with role_STUDENT can do all CRUD method
+                // Cross Site Request Forgery: https://owasp.org/www-community/attacks/csrf
+                // how spring security generate csrf token
+                // use when client send a request to server using web browser(chrome, firefox)
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-//                // account having COURSE_WRITE authority can do DELETE, PUT, POST methods
-//                // the order of these methods are important
-//                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                // account with roles ADMIN or ADMINTRAINEE can do GET method
-//                .antMatchers(HttpMethod.GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -55,21 +54,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails duongUser = User.builder()
                 .username("duong")
                 .password(passwordEncoder.encode("pass"))
-//                .roles(STUDENT.name()) //ROLE_STUDENT
                 .authorities(STUDENT.getGrantedAuthorities()) // Add authority to STUDENT
                 .build();
 
         UserDetails shisuiUser = User.builder()
                 .username("shisui")
                 .password(passwordEncoder.encode("pass"))
-//                .roles(ADMIN.name()) //ROLE_ADMIN
                 .authorities(ADMIN.getGrantedAuthorities()) // Add authority to ADMIN
                 .build();
 
         UserDetails doanUser = User.builder()
                 .username("doan")
                 .password(passwordEncoder.encode("pass"))
-//                .roles(ADMINTRAINEE.name()) //ROLE_ADMINTRAINEE
                 .authorities(ADMINTRAINEE.getGrantedAuthorities()) // Add authority to ADMINTRAINEE
                 .build();
         return new InMemoryUserDetailsManager(
