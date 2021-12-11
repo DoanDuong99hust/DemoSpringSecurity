@@ -1,6 +1,7 @@
 package com.example.demosecurity.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,14 +29,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/")
-                .permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic(); // Basic Auth
     }
 
+    @Override
+    @Bean
     protected UserDetailsService userDetailsService() {
         UserDetails duongUser = User.builder()
                 .username("duong")
@@ -54,7 +57,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder.encode("pass"))
                 .roles(ADMINTRAINEE.name()) //ROLE_ADMINTRAINEE
                 .build();
-
         return new InMemoryUserDetailsManager(
                 duongUser,
                 shisuiUser,
