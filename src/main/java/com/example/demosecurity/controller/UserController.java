@@ -1,4 +1,4 @@
-package com.example.demosecurity.controller.user;
+package com.example.demosecurity.controller;
 
 import com.example.demosecurity.entity.UserEntity;
 import com.example.demosecurity.mapper.dto.UserRequest;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-users")
-    public ResponseEntity<List<UserEntity>> findAll() {
+    public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 

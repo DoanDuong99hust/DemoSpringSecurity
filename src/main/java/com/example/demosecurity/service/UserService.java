@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    List<UserEntity> findAll();
+    List<UserResponse> findAll();
     UserEntity findById(Long id);
     UserResponse save(UserRequest userRequest);
     UserResponse update(UserRequest userRequest);

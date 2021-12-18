@@ -26,13 +26,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> findAll() {
-        List<UserEntity> userEntities = new ArrayList<>();
+    public List<UserResponse> findAll() {
+        List<UserResponse> userResponses = new ArrayList<>();
         for (UserEntity user: userRepository.findAll()
              ) {
-            userEntities.add(user);
+            userResponses.add(userMapper.mapEntityToResponse(user));
         }
-        return userEntities;
+        return userResponses;
     }
 
     @Override
