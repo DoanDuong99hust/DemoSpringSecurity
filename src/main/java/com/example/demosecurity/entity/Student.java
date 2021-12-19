@@ -20,4 +20,12 @@ public class Student extends BaseEntity{
         this.studentId = studentId;
         this.studentName = studentName;
     }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
 }
