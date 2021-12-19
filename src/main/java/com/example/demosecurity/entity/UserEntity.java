@@ -26,7 +26,7 @@ public class UserEntity extends BaseEntity {
 	@Column
 	private Integer status;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "userId"),
 			inverseJoinColumns = @JoinColumn(name = "roleId"))
 
